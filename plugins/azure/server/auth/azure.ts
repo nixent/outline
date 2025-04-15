@@ -84,7 +84,6 @@ if (env.AZURE_CLIENT_ID && env.AZURE_CLIENT_SECRET) {
         // Note: userPrincipalName is last here for backwards compatibility with
         // previous versions of Outline that did not include it.
         const email =
-          profile.email ||
           profileResponse.mail ||
           profileResponse.userPrincipalName;
 
