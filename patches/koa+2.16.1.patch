@@ -1,0 +1,32 @@
+diff --git a/node_modules/koa/lib/request.js b/node_modules/koa/lib/request.js
+index c2b0db6..abf767f 100644
+--- a/node_modules/koa/lib/request.js
++++ b/node_modules/koa/lib/request.js
+@@ -433,9 +433,24 @@ module.exports = {
+   get ips() {
+     const proxy = this.app.proxy;
+     const val = this.get(this.app.proxyIpHeader);
+-    let ips = proxy && val
+-      ? splitCommaSeparatedValues(val)
+-      : [];
++    let ips = [];
++
++    if (proxy && val) {
++      ips = val.split(/\s*,\s*/)
++        .map(host => {
++          let normalizedHost = host;
++
++          if (net.isIPv6(host)) {
++            normalizedHost = `[${host}]`;
++          }
++
++          const hostname = new URL(`http://${normalizedHost}`).hostname;
++
++          return hostname.replace(/(^\[|\]$)/g, '');
++        })
++        .filter(ip => !!ip);
++    }
++
+     if (this.app.maxIpsCount > 0) {
+       ips = ips.slice(-this.app.maxIpsCount);
+     }
