@@ -60,7 +60,7 @@ class UiStore {
   progressBarVisible = false;
 
   @observable
-  tocVisible: boolean | undefined;
+  tocVisible: boolean | true;
 
   @observable
   mobileSidebarVisible = false;
